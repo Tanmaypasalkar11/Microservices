@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Build and Push Docker Images
 
 on:
   push:
@@ -19,17 +19,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # API Gateway
       - name: Build & Push API Gateway
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-todo-api-gateway ./api-gateway
-          docker push ${{ secrets.DOCKER_USERNAME }}/ai-todo-api-gateway
+          docker build -t rockysaheb/ai-todo-api-gateway ./api-gateway
+          docker push rockysaheb/ai-todo-api-gateway
 
+      # Auth Service
       - name: Build & Push Auth Service
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-todo-auth-service ./auth-service
-          docker push ${{ secrets.DOCKER_USERNAME }}/ai-todo-auth-service
+          docker build -t rockysaheb/ai-todo-auth-service ./auth-service
+          docker push rockysaheb/ai-todo-auth-service
 
+      # Todo Service
       - name: Build & Push Todo Service
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-todo-todo-service ./todo-service
-          docker push ${{ secrets.DOCKER_USERNAME }}/ai-todo-todo-service
+          docker build -t rockysaheb/ai-todo-todo-service ./todo-service
+          docker push rockysaheb/ai-todo-todo-service
