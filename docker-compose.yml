@@ -1,0 +1,45 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  auth-service:
+    image: yourdockerhubusername/ai-todo-auth-service
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./auth-service/.env
+    depends_on:
+      - mongo
+
+  todo-service:
+    image: yourdockerhubusername/ai-todo-todo-service
+    build: ./todo-service
+    container_name: todo-service
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./todo-service/.env
+    depends_on:
+      - mongo
+
+  api-gateway:
+    image: yourdockerhubusername/ai-todo-api-gateway
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./api-gateway/.env
+    depends_on:
+      - auth-service
+      - todo-service
+
+volumes:
+  mongo_data:
